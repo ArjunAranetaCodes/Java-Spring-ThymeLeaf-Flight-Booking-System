@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Flight Bookings</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 p-8">
+<div class="flex justify-between items-center mb-4">
+    <h1 class="text-2xl font-bold">Flight Bookings</h1>
+    <a th:href="@{/flights}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        View Flights
+    </a>
+</div>
+<table class="w-full bg-white shadow-md rounded-lg overflow-hidden">
+    <thead class="bg-gray-200">
+    <tr>
+        <th class="px-4 py-3 text-left">Booking ID</th>
+        <th class="px-4 py-3 text-left">Flight Number</th>
+        <th class="px-4 py-3 text-left">Passenger Name</th>
+        <th class="px-4 py-3 text-left">Passenger Email</th>
+        <th class="px-4 py-3 text-left">Booking Date</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="booking : ${bookings}" class="border-b">
+        <td class="px-4 py-3" th:text="${booking.id}"></td>
+        <td class="px-4 py-3" th:text="${booking.flight.flightNumber}"></td>
+        <td class="px-4 py-3" th:text="${booking.passengerName}"></td>
+        <td class="px-4 py-3" th:text="${booking.passengerEmail}"></td>
+        <td class="px-4 py-3" th:text="${#temporals.format(booking.bookingDate, 'yyyy-MM-dd HH:mm')}"></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Flights</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 p-8">
+<div class="flex justify-between items-center mb-4">
+    <h1 class="text-2xl font-bold">Flights</h1>
+    <a th:href="@{/bookings}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        View Bookings
+    </a>
+</div>
+<table class="w-full bg-white shadow-md rounded-lg overflow-hidden">
+    <thead class="bg-gray-200">
+    <tr>
+        <th class="px-4 py-3 text-left cursor-pointer" th:classappend="${sortField == 'id' ? 'sort-' + sortDirection : ''}" onclick="sortTable(0)">
+            ID
+            <span th:if="${sortField == 'id'}" th:text="${sortDirection == 'asc' ? '▲' : '▼'}" class="ml-2"></span>
+        </th>
+        <th class="px-4 py-3 text-left cursor-pointer" th:classappend="${sortField == 'flightNumber' ? 'sort-' + sortDirection : ''}" onclick="sortTable(1)">
+            Flight Number
+            <span th:if="${sortField == 'flightNumber'}" th:text="${sortDirection == 'asc' ? '▲' : '▼'}" class="ml-2"></span>
+        </th>
+        <th class="px-4 py-3 text-left cursor-pointer" th:classappend="${sortField == 'departureTime' ? 'sort-' + sortDirection : ''}" onclick="sortTable(2)">
+            Departure Time
+            <span th:if="${sortField == 'departureTime'}" th:text="${sortDirection == 'asc' ? '▲' : '▼'}" class="ml-2"></span>
+        </th>
+        <th class="px-4 py-3 text-left cursor-pointer" th:classappend="${sortField == 'arrivalTime' ? 'sort-' + sortDirection : ''}" onclick="sortTable(3)">
+            Arrival Time
+            <span th:if="${sortField == 'arrivalTime'}" th:text="${sortDirection == 'asc' ? '▲' : '▼'}" class="ml-2"></span>
+        </th>
+        <th class="px-4 py-3 text-left cursor-pointer" th:classappend="${sortField == 'price' ? 'sort-' + sortDirection : ''}" onclick="sortTable(4)">
+            Price
+            <span th:if="${sortField == 'price'}" th:text="${sortDirection == 'asc' ? '▲' : '▼'}" class="ml-2"></span>
+        </th>
+        <th class="px-4 py-3 text-left">
+            Book
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="flight : ${flights.content}" class="border-b">
+        <td class="px-4 py-3" th:text="${flight.id}"></td>
+        <td class="px-4 py-3" th:text="${flight.flightNumber}"></td>
+        <td class="px-4 py-3" th:text="${#temporals.format(flight.departureTime, 'yyyy-MM-dd HH:mm')}"></td>
+        <td class="px-4 py-3" th:text="${#temporals.format(flight.arrivalTime, 'yyyy-MM-dd HH:mm')}"></td>
+        <td class="px-4 py-3" th:text="${#numbers.formatDecimal(flight.price, 0, 2)}"></td>
+        <td class="px-4 py-3">
+            <a th:href="@{/flights/{id}(id=${flight.id})}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Book
+            </a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<script>
+    function sortTable(n) {
+    var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+    table = document.getElementsByTagName("table")[0];
+    switching = true;
+    dir = "asc";
+    while (switching) {
+        switching = false;
+        rows = table.rows;
+        for (i = 1; i < (rows.length - 1); i++) {
+            shouldSwitch = false;
+            x = rows[i].getElementsByTagName("TD")[n];
+            y = rows[i + 1].getElementsByTagName("TD")[n];
+            if (dir == "asc") {
+                if (isNaN(parseFloat(x.innerHTML)) && isNaN(parseFloat(y.innerHTML))) {
+                    // Compare strings
+                    if (x.innerHTML.toLowerCase().localeCompare(y.innerHTML.toLowerCase()) > 0) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else {
+                    // Compare numbers
+                    if (parseFloat(x.innerHTML) > parseFloat(y.innerHTML)) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            } else if (dir == "desc") {
+                if (isNaN(parseFloat(x.innerHTML)) && isNaN(parseFloat(y.innerHTML))) {
+                    // Compare strings
+                    if (x.innerHTML.toLowerCase().localeCompare(y.innerHTML.toLowerCase()) < 0) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else {
+                    // Compare numbers
+                    if (parseFloat(x.innerHTML) < parseFloat(y.innerHTML)) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            }
+        }
+        if (shouldSwitch) {
+            rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+            switching = true;
+            switchcount++;
+        } else {
+            if (switchcount == 0 && dir == "asc") {
+                dir = "desc";
+                switching = true;
+            }
+        }
+    }
+}
+
+</script>
+</body>
+</html>
