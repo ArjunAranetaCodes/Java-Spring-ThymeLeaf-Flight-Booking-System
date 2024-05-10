@@ -1,7 +1,7 @@
 ## Flight Booking System
 
 ### Overview
-The Flight Booking System is a Java Spring Boot application that allows users to view available flights, sort them by various criteria, and book flights. The application uses Thymeleaf for the frontend and integrates with a MySQL database to store flight and booking information.
+This Flight Booking System is a Java Spring Boot application that allows users to view available flights, sort them by various criteria, and book flights. The application uses Thymeleaf for the frontend and integrates with a MySQL database to store flight and booking information.
 
 ### Features
 - View a list of available flights
